@@ -39,7 +39,7 @@ public class fry {
     private BigDecimal actorGhPrice;
 
     /**
-     * 实际配送费 美元
+     * 实际配送费 0.01kg/美元
      */
     private BigDecimal actorPrice;
 }
