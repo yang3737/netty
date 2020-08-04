@@ -1,4 +1,4 @@
-package cn.lcy.wx;
+package cn.lcy.wx.protocol.command;
 
 public interface Command {
 

@@ -1,4 +1,6 @@
-package cn.lcy.wx;
+package cn.lcy.wx.serialize;
+
+import cn.lcy.wx.serialize.impl.JSONSerializer;
 
 public interface Serializer {
 

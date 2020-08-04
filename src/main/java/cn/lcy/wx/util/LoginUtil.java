@@ -1,5 +1,6 @@
-package cn.lcy.wx;
+package cn.lcy.wx.util;
 
+import cn.lcy.wx.attr.Attributes;
 import io.netty.channel.Channel;
 import io.netty.util.Attribute;
 

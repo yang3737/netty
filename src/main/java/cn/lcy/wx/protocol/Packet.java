@@ -1,4 +1,4 @@
-package cn.lcy.wx;
+package cn.lcy.wx.protocol;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;

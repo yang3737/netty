@@ -1,4 +1,4 @@
-package cn.lcy.io;
+package cn.lcy.netty;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -10,40 +10,38 @@ public class ChannelAccept {
 
     public static void main(String[] argv)
             throws Exception {
-        int port = 1234;
+        int port = 1234; // default
         if (argv.length > 0) {
-            port = Integer.valueOf(argv[0]);
+            port = Integer.parseInt(argv[0]);
         }
-        //创建一个缓冲区对象
         ByteBuffer buffer = ByteBuffer.wrap(GREETING.getBytes());
-        //建立一个ServerScocket通道
         ServerSocketChannel ssc = ServerSocketChannel.open();
-        //绑定监听端口
         ssc.socket().bind(new InetSocketAddress(port));
-        //设置为非阻塞模式
         ssc.configureBlocking(false);
         while (true) {
-            System.out.println("等待连接");
-            //是否有客户连接
+            System.out.println("Waiting for connections");
             SocketChannel sc = ssc.accept();
             if (sc == null) {
-                Thread.sleep(5000);
+// no connections, snooze a while
+                Thread.sleep(2000);
             } else {
                 sc.configureBlocking(false);
-                //翻转缓冲;
-                while (buffer.remaining() > 0) {
-                    byte a = buffer.get();
-                    System.out.println(a);
+                ByteBuffer allocate = ByteBuffer.allocateDirect (16 * 1024);
+                while(sc.read(allocate)>0){
+                    allocate.flip();
+                    while (allocate.hasRemaining( )) {
+                        byte b = allocate.get();
+                        System.out.println(b);
+                    }
+                    allocate.clear();
                 }
-                buffer.clear();
 
                 System.out.println("Incoming connection from: "
                         + sc.socket().getRemoteSocketAddress());
                 buffer.rewind();
-
+                sc.write(buffer);
                 sc.close();
             }
         }
-
     }
 }

@@ -1,12 +1,18 @@
-package cn.lcy.wx;
+package cn.lcy.wx.protocol;
 
+import cn.lcy.wx.protocol.request.LoginRequestPacket;
+import cn.lcy.wx.protocol.response.LoginResponsePacket;
+import cn.lcy.wx.protocol.request.MessageRequestPacket;
+import cn.lcy.wx.protocol.response.MessageResponsePacket;
+import cn.lcy.wx.serialize.Serializer;
+import cn.lcy.wx.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static cn.lcy.wx.Command.*;
+import static cn.lcy.wx.protocol.command.Command.*;
 
 
 public class PacketCodeC {
@@ -30,21 +36,17 @@ public class PacketCodeC {
     }
 
 
-    public ByteBuf encode(ByteBufAllocator byteBufAllocator, Packet packet) {
-        // 1. 创建 ByteBuf 对象
-        ByteBuf byteBuf = byteBufAllocator.ioBuffer();
-        // 2. 序列化 java 对象
+    public void encode(ByteBuf byteBuf, Packet packet) {
+        // 1. 序列化 java 对象
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
-        // 3. 实际编码过程
+        // 2. 实际编码过程
         byteBuf.writeInt(MAGIC_NUMBER);
         byteBuf.writeByte(packet.getVersion());
         byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlogrithm());
         byteBuf.writeByte(packet.getCommand());
         byteBuf.writeInt(bytes.length);
         byteBuf.writeBytes(bytes);
-
-        return byteBuf;
     }
 
 

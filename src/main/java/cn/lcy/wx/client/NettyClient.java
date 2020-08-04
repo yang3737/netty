@@ -1,7 +1,12 @@
-package cn.lcy.wx;
+package cn.lcy.wx.client;
 
+import cn.lcy.wx.client.handler.LoginResponseHandler;
+import cn.lcy.wx.client.handler.MessageResponseHandler;
+import cn.lcy.wx.codec.PacketDecoder;
+import cn.lcy.wx.codec.PacketEncoder;
+import cn.lcy.wx.util.LoginUtil;
+import cn.lcy.wx.protocol.request.MessageRequestPacket;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -34,7 +39,10 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) {
-                        ch.pipeline().addLast(new ClientHandler());
+                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(new LoginResponseHandler());
+                        ch.pipeline().addLast(new MessageResponseHandler());
+                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
         // 4.建立连接
@@ -66,10 +74,7 @@ public class NettyClient {
                     System.out.println("输入消息发送至服务端:");
                     Scanner sc = new Scanner(System.in);
                     String line = sc.nextLine();
-                    MessageRequestPacket requestPacket = new MessageRequestPacket();
-                    requestPacket.setMessage(line);
-                    ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(),requestPacket);
-                    channel.writeAndFlush(byteBuf);
+                    channel.writeAndFlush(new MessageRequestPacket(line));
                 }
             }
         }).start();

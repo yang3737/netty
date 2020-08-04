@@ -1,5 +1,7 @@
-package cn.lcy.wx;
+package cn.lcy.wx.serialize.impl;
 
+import cn.lcy.wx.serialize.Serializer;
+import cn.lcy.wx.serialize.SerializerAlogrithm;
 import com.alibaba.fastjson.JSON;
 
 public class JSONSerializer implements Serializer {

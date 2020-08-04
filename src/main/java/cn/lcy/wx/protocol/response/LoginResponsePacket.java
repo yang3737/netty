@@ -1,8 +1,9 @@
-package cn.lcy.wx;
+package cn.lcy.wx.protocol.response;
 
+import cn.lcy.wx.protocol.Packet;
 import lombok.Data;
 
-import static cn.lcy.wx.Command.LOGIN_RESPONSE;
+import static cn.lcy.wx.protocol.command.Command.LOGIN_RESPONSE;
 
 @Data
 public class LoginResponsePacket extends Packet {
