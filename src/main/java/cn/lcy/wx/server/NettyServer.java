@@ -1,6 +1,7 @@
 package cn.lcy.wx.server;
 
 import cn.lcy.wx.codec.PacketDecoder;
+import cn.lcy.wx.codec.PacketEncoder;
 import cn.lcy.wx.server.handler.LoginRequestHandler;
 import cn.lcy.wx.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -30,7 +31,7 @@ public class NettyServer {
                                 socketChannel.pipeline().addLast(new PacketDecoder());
                                 socketChannel.pipeline().addLast(new LoginRequestHandler());
                                 socketChannel.pipeline().addLast(new MessageRequestHandler());
-                                socketChannel.pipeline().addLast(new PacketDecoder());
+                                socketChannel.pipeline().addLast(new PacketEncoder());
                             }
                         });
         bind(serverBootstrap,PORT);
