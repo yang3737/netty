@@ -7,8 +7,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 public class PacketEncoder extends MessageToByteEncoder<Packet> {
+
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, Packet packet, ByteBuf out) throws Exception {
-        PacketCodeC.INSTANCE.encode(out,packet);
+    protected void encode(ChannelHandlerContext ctx, Packet packet, ByteBuf out) {
+        PacketCodeC.INSTANCE.encode(out, packet);
     }
 }
