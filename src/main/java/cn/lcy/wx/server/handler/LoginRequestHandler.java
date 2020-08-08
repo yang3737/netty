@@ -3,6 +3,7 @@ package cn.lcy.wx.server.handler;
 import cn.lcy.wx.protocol.PacketCodeC;
 import cn.lcy.wx.protocol.request.LoginRequestPacket;
 import cn.lcy.wx.protocol.response.LoginResponsePacket;
+import cn.lcy.wx.util.LoginUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -18,6 +19,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         loginResponsePacket.setVersion(loginRequestPacket.getVersion());
         if (valid(loginRequestPacket)) {
             loginResponsePacket.setSuccess(true);
+            LoginUtil.markAsLogin(ctx.channel());
             System.out.println(new Date() + ": 登录成功!");
         } else {
             loginResponsePacket.setReason("账号密码校验失败");

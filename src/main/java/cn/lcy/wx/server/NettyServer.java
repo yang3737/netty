@@ -2,6 +2,7 @@ package cn.lcy.wx.server;
 
 import cn.lcy.wx.codec.PacketDecoder;
 import cn.lcy.wx.codec.PacketEncoder;
+import cn.lcy.wx.server.handler.AuthHandler;
 import cn.lcy.wx.server.handler.LoginRequestHandler;
 import cn.lcy.wx.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -30,6 +31,7 @@ public class NettyServer {
                             protected void initChannel(NioSocketChannel socketChannel) throws Exception {
                                 socketChannel.pipeline().addLast(new PacketDecoder());
                                 socketChannel.pipeline().addLast(new LoginRequestHandler());
+                                socketChannel.pipeline().addLast(new AuthHandler());
                                 socketChannel.pipeline().addLast(new MessageRequestHandler());
                                 socketChannel.pipeline().addLast(new PacketEncoder());
                             }
