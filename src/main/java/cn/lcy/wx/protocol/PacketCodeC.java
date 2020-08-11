@@ -1,9 +1,7 @@
 package cn.lcy.wx.protocol;
 
-import cn.lcy.wx.protocol.request.LoginRequestPacket;
-import cn.lcy.wx.protocol.response.LoginResponsePacket;
-import cn.lcy.wx.protocol.request.MessageRequestPacket;
-import cn.lcy.wx.protocol.response.MessageResponsePacket;
+import cn.lcy.wx.protocol.request.*;
+import cn.lcy.wx.protocol.response.*;
 import cn.lcy.wx.serialize.Serializer;
 import cn.lcy.wx.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
@@ -30,6 +28,16 @@ public class PacketCodeC {
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
         packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
         packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
+        packetTypeMap.put(LOGOUT_REQUEST, LogoutRequestPacket.class);
+        packetTypeMap.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
+        packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
+        packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
+        packetTypeMap.put(JOIN_GROUP_REQUEST, JoinGroupRequestPacket.class);
+        packetTypeMap.put(JOIN_GROUP_RESPONSE, JoinGroupResponsePacket.class);
+        packetTypeMap.put(QUIT_GROUP_REQUEST, QuitGroupRequestPacket.class);
+        packetTypeMap.put(QUIT_GROUP_RESPONSE, QuitGroupResponsePacket.class);
+        packetTypeMap.put(LIST_GROUP_MEMBERS_REQUEST, ListGroupMembersRequestPacket.class);
+        packetTypeMap.put(LIST_GROUP_MEMBERS_RESPONSE, ListGroupMembersResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();

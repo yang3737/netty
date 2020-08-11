@@ -2,9 +2,9 @@ package cn.lcy.wx.server;
 
 import cn.lcy.wx.codec.PacketDecoder;
 import cn.lcy.wx.codec.PacketEncoder;
-import cn.lcy.wx.server.handler.AuthHandler;
-import cn.lcy.wx.server.handler.LoginRequestHandler;
-import cn.lcy.wx.server.handler.MessageRequestHandler;
+import cn.lcy.wx.codec.Spliter;
+import cn.lcy.wx.protocol.request.LogoutRequestHandler;
+import cn.lcy.wx.server.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -27,13 +27,25 @@ public class NettyServer {
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.TCP_NODELAY, true)
                         .childHandler(new ChannelInitializer<NioSocketChannel>() {
-                            @Override
-                            protected void initChannel(NioSocketChannel socketChannel) throws Exception {
-                                socketChannel.pipeline().addLast(new PacketDecoder());
-                                socketChannel.pipeline().addLast(new LoginRequestHandler());
-                                socketChannel.pipeline().addLast(new AuthHandler());
-                                socketChannel.pipeline().addLast(new MessageRequestHandler());
-                                socketChannel.pipeline().addLast(new PacketEncoder());
+                            protected void initChannel(NioSocketChannel ch) {
+                                ch.pipeline().addLast(new Spliter());
+                                ch.pipeline().addLast(new PacketDecoder());
+                                // 登录请求处理器
+                                ch.pipeline().addLast(new LoginRequestHandler());
+                                ch.pipeline().addLast(new AuthHandler());
+                                // 单聊消息请求处理器
+                                ch.pipeline().addLast(new MessageRequestHandler());
+                                // 创建群请求处理器
+                                ch.pipeline().addLast(new CreateGroupRequestHandler());
+                                // 加群请求处理器
+                                ch.pipeline().addLast(new JoinGroupRequestHandler());
+                                // 退群请求处理器
+                                ch.pipeline().addLast(new QuitGroupRequestHandler());
+                                // 获取群成员请求处理器
+                                ch.pipeline().addLast(new ListGroupMembersRequestHandler());
+                                // 登出请求处理器
+                                ch.pipeline().addLast(new LogoutRequestHandler());
+                                ch.pipeline().addLast(new PacketEncoder());
                             }
                         });
         bind(serverBootstrap,PORT);
